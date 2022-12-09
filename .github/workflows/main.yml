@@ -35,8 +35,7 @@ jobs:
       with:
         filename: 'verademo.war'
         path: ./verademo.war
-  
-              
+                
     - uses: actions/upload-artifact@v2 
       with:
         path: ./verademo.war
