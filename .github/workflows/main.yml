@@ -1,0 +1,54 @@
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Build with Maven
+      run: mvn -B package --file app/pom.xml
+    - name: Veracode Pipeline
+      run: |
+        curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+        unzip -o pipeline-scan-LATEST.zip
+        java -jar pipeline-scan.jar -vid ${{ env.VID }} -vkey ${{ env.VKEY }} -f /home/vsts/work/1/s/app/target/verademo.war || true
+      shell: bash
+    - uses: actions/upload-artifact@v2
+      with:
+        path: ${{ github.workspace }}/results.json
+        name: VeracodeBaseline
+        
+  Veracode-SAST-Policy-Scan:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Archive Release
+      uses: actions/setup-go@v3
+      with:
+        filename: 'verademo.war'
+        path: ./verademo.war
+  
+              
+    - uses: actions/upload-artifact@v2 
+      with:
+        path: ./verademo.war
+    - uses: veracode/veracode-uploadandscan-action@master 
+      with:
+        vid: '${{ secrets.VID }}'
+        vkey: '${{ secrets.VKEY }}'
+        criticality: 'Medium'
+        appname: 'Lab-Verademo-Java'
+        createprofile: 'true'
+        filepath: ./
+        deleteIncompleteScan: 'true'
+        version: ${{ github.run_id }}'
+        scantimeout: 30    
+                    
