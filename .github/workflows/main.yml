@@ -4,7 +4,7 @@ on:
     - main
   workflow_dispatch:
 jobs:
-  build:
+  Build_SAST_PipelineScan:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
         name: VeracodeBaseline
         
   Veracode-SAST-Policy-Scan:
-    needs: build
+    needs: Build_SAST_PipelineScan
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
