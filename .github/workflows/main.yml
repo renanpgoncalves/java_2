@@ -54,7 +54,7 @@ jobs:
         filepath: ./
         deleteIncompleteScan: 'true'
         version: ${{ github.run_id }}'
-        scantimeout: 30
+        scantimeout: 34
 
   Veracode_PipelineScan:
     runs-on: ubuntu-latest
