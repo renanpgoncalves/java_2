@@ -18,7 +18,7 @@ jobs:
       run: |
         curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
         unzip -o pipeline-scan-LATEST.zip
-        java -jar pipeline-scan.jar -vid ${VID} -vkey ${VKEY} -f /home/vsts/work/1/s/app/target/verademo.war || true
+        java -jar pipeline-scan.jar -vid ${{ env.VID }} -vkey ${{ env.VKEY }} -f /home/vsts/work/1/s/app/target/verademo.war || true
       shell: bash
     - uses: actions/upload-artifact@v2
       with:
