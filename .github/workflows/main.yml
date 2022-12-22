@@ -26,6 +26,7 @@ jobs:
         name: VeracodeBaseline
         
   Veracode_SCA:
+    needs: Build_SAST_PipelineScan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -36,7 +37,7 @@ jobs:
           curl -sSL 'https://download.sourceclear.com/ci.sh' | bash -s – scan --update-advisor --allow-dirty
         
   Veracode-SAST-Policy-Scan:
-    needs: Build_SAST_PipelineScan
+    needs: Veracode_SCA
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
