@@ -18,7 +18,7 @@ jobs:
       run: |
         curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
         unzip -o pipeline-scan-LATEST.zip
-        java -jar pipeline-scan.jar -vid ${{ env.VID }} -vkey ${{ env.VKEY }} -f /home/vsts/work/1/s/app/target/verademo.war || true
+        java -jar pipeline-scan.jar -vid ${VID} -vkey ${VKEY} -f /home/vsts/work/1/s/app/target/verademo.war || true
       shell: bash
     - uses: actions/upload-artifact@v2
       with:
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Veracode SCA
         env:
-          SRCCLR_API_TOKEN: ${{ secrets.SCA }} 
+          SRCCLR_API_TOKEN: ${SCA} 
         run: |
           curl -sSL 'https://download.sourceclear.com/ci.sh' | bash -s – scan --update-advisor --allow-dirty
         
@@ -52,8 +52,8 @@ jobs:
         path: ./verademo.war
     - uses: veracode/veracode-uploadandscan-action@master 
       with:
-        vid: '${{ secrets.VID }}'
-        vkey: '${{ secrets.VKEY }}'
+        vid: '${VID}'
+        vkey: '${VKEY}'
         criticality: 'Medium'
         appname: 'Lab-Verademo-Java'
         createprofile: 'true'
